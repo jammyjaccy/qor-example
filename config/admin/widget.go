@@ -189,10 +189,11 @@ func initWidgets() {
 
 		// normal banner editor
 		Widgets.RegisterWidget(&widget.Widget{
-			Name:        "BannerEditor",
-			Templates:   []string{"banner_editor"},
-			PreviewIcon: "/images/Widget-BannerEditor.png",
-			Setting:     bannerEditorResource,
+			Name:          "BannerEditor",
+			Templates:     []string{"banner_editor"},
+			PreviewIcon:   "/images/Widget-BannerEditor.png",
+			Setting:       bannerEditorResource,
+			InlineEditURL: func(*widget.Context) string { return "/admin" },
 			Context: func(context *widget.Context, setting interface{}) *widget.Context {
 				context.Options["Value"] = template.HTML(setting.(*bannerEditorArgument).Value)
 				return context
@@ -273,11 +274,12 @@ func initWidgets() {
 		}})
 
 		Widgets.RegisterWidget(&widget.Widget{
-			Name:        "Products",
-			Templates:   []string{"products"},
-			Group:       "Products",
-			PreviewIcon: "/images/Widget-Products.png",
-			Setting:     selectedProductsResource,
+			Name:          "Products",
+			Templates:     []string{"products"},
+			Group:         "Products",
+			PreviewIcon:   "/images/Widget-Products.png",
+			Setting:       selectedProductsResource,
+			InlineEditURL: func(*widget.Context) string { return "/admin" },
 			Context: func(context *widget.Context, setting interface{}) *widget.Context {
 				if setting != nil {
 					var products []*models.Product
