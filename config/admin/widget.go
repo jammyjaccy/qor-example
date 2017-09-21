@@ -183,9 +183,18 @@ func initWidgets() {
 			},
 		})
 
+		banner_editor.RegisterExternalStylePath("/dist/qor.css")
+
 		bannerEditorResource := Admin.NewResource(&bannerEditorArgument{})
+
+		// full width banner editor
+		fixedwidthBannerSizes := make(map[string]banner_editor.BannerSize)
+		fixedwidthBannerSizes["Laptop"] = banner_editor.BannerSize{Height: 500}
+		fixedwidthBannerSizes["Mobile"] = banner_editor.BannerSize{Height: 150}
+
 		bannerEditorResource.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
+			BannerSizes:  fixedwidthBannerSizes,
 		}})
 
 		// normal banner editor
@@ -201,9 +210,14 @@ func initWidgets() {
 		})
 
 		// full width banner editor
+		fullwidthBannerSizes := make(map[string]banner_editor.BannerSize)
+		fullwidthBannerSizes["Laptop"] = banner_editor.BannerSize{Height: 500}
+		fullwidthBannerSizes["Mobile"] = banner_editor.BannerSize{Width: 320, Height: 150}
+
 		fullwidthBannerEditorResource := Admin.NewResource(&bannerEditorArgument{})
 		fullwidthBannerEditorResource.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
+			BannerSizes:  fullwidthBannerSizes,
 		}})
 
 		Widgets.RegisterWidget(&widget.Widget{
@@ -227,8 +241,14 @@ func initWidgets() {
 		}
 		slideShowResource := Admin.NewResource(&slideShowArgument{})
 		slideBanners := slideShowResource.Meta(&admin.Meta{Name: "SlideImages"}).Resource
+
+		sizes := make(map[string]banner_editor.BannerSize)
+		sizes["Laptop"] = banner_editor.BannerSize{Width: 960, Height: 500}
+		sizes["Mobile"] = banner_editor.BannerSize{Width: 320, Height: 150}
+
 		slideBanners.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
+			BannerSizes:  sizes,
 		}})
 
 		// slideShowResource.AddProcessor(func(value interface{}, metaValues *resource.MetaValues, context *qor.Context) error {
