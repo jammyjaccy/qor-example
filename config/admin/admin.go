@@ -158,7 +158,18 @@ func init() {
 		},
 	}})
 	product.Meta(&admin.Meta{Name: "Category", Config: &admin.SelectOneConfig{AllowBlank: true}})
-	product.Meta(&admin.Meta{Name: "Collections", Config: &admin.SelectManyConfig{SelectMode: "bottom_sheet"}})
+
+	cc := Admin.NewResource(&models.Collection{}, &admin.Config{Name: "CCC"})
+	cc.Scope(&admin.Scope{
+		Handler: func(db *gorm.DB, _ *qor.Context) *gorm.DB {
+			return db.Where("id = 1")
+		},
+		Default: true,
+	})
+	cc.Meta(&admin.Meta{Name: "CC", Valuer: func(interface{}, *qor.Context) interface{} { return "v" }})
+	cc.IndexAttrs("ID", "CC")
+
+	product.Meta(&admin.Meta{Name: "Collections", Config: &admin.SelectManyConfig{RemoteDataResource: cc}})
 
 	product.Meta(&admin.Meta{Name: "MainImage", Config: &media_library.MediaBoxConfig{
 		RemoteDataResource: ProductImagesResource,
