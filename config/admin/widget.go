@@ -185,6 +185,16 @@ func initWidgets() {
 		bannerEditorResource := Admin.NewResource(&bannerEditorArgument{})
 		bannerEditorResource.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
+			Platforms: []banner_editor.Platform{
+				{
+					Name:     "Laptop",
+					SafeArea: banner_editor.Size{Width: 1000, Height: 500},
+				},
+				{
+					Name:     "Mobile",
+					SafeArea: banner_editor.Size{Width: 600, Height: 300},
+				},
+			},
 		}})
 
 		// normal banner editor
@@ -203,6 +213,16 @@ func initWidgets() {
 		fullwidthBannerEditorResource := Admin.NewResource(&bannerEditorArgument{})
 		fullwidthBannerEditorResource.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
+			Platforms: []banner_editor.Platform{
+				{
+					Name:     "Laptop",
+					SafeArea: banner_editor.Size{Width: 1000, Height: 500},
+				},
+				{
+					Name:     "Mobile",
+					SafeArea: banner_editor.Size{Width: 600, Height: 300},
+				},
+			},
 		}})
 
 		Widgets.RegisterWidget(&widget.Widget{
