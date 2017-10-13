@@ -192,7 +192,7 @@ func initWidgets() {
 				},
 				{
 					Name:     "Mobile",
-					SafeArea: banner_editor.Size{Width: 600, Height: 300},
+					SafeArea: banner_editor.Size{Width: 0, Height: 300},
 				},
 			},
 		}})
@@ -216,11 +216,11 @@ func initWidgets() {
 			Platforms: []banner_editor.Platform{
 				{
 					Name:     "Laptop",
-					SafeArea: banner_editor.Size{Width: 1000, Height: 500},
+					SafeArea: banner_editor.Size{Width: 960, Height: 500},
 				},
 				{
 					Name:     "Mobile",
-					SafeArea: banner_editor.Size{Width: 600, Height: 300},
+					SafeArea: banner_editor.Size{Width: 0, Height: 300}, // width: 0 = width: 100%
 				},
 			},
 		}})
