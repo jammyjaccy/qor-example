@@ -187,14 +187,19 @@ func initWidgets() {
 
 		bannerEditorResource := Admin.NewResource(&bannerEditorArgument{})
 
-		// full width banner editor
-		fixedwidthBannerSizes := make(map[string]banner_editor.BannerSize)
-		fixedwidthBannerSizes["Laptop"] = banner_editor.BannerSize{Height: 500}
-		fixedwidthBannerSizes["Mobile"] = banner_editor.BannerSize{Height: 150}
-
 		bannerEditorResource.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
-			BannerSizes:  fixedwidthBannerSizes,
+
+			Platforms: []banner_editor.Platform{
+				{
+					Name:     "Laptop",
+					SafeArea: banner_editor.Size{Width: 1000, Height: 500},
+				},
+				{
+					Name:     "Mobile",
+					SafeArea: banner_editor.Size{Width: 0, Height: 300},
+				},
+			},
 		}})
 
 		// normal banner editor
@@ -210,14 +215,21 @@ func initWidgets() {
 		})
 
 		// full width banner editor
-		fullwidthBannerSizes := make(map[string]banner_editor.BannerSize)
-		fullwidthBannerSizes["Laptop"] = banner_editor.BannerSize{Height: 500}
-		fullwidthBannerSizes["Mobile"] = banner_editor.BannerSize{Width: 320, Height: 150}
 
 		fullwidthBannerEditorResource := Admin.NewResource(&bannerEditorArgument{})
 		fullwidthBannerEditorResource.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
-			BannerSizes:  fullwidthBannerSizes,
+
+			Platforms: []banner_editor.Platform{
+				{
+					Name:     "Laptop",
+					SafeArea: banner_editor.Size{Width: 960, Height: 500},
+				},
+				{
+					Name:     "Mobile",
+					SafeArea: banner_editor.Size{Width: 0, Height: 300}, // width: 0 = width: 100%
+				},
+			},
 		}})
 
 		Widgets.RegisterWidget(&widget.Widget{
@@ -242,13 +254,18 @@ func initWidgets() {
 		slideShowResource := Admin.NewResource(&slideShowArgument{})
 		slideBanners := slideShowResource.Meta(&admin.Meta{Name: "SlideImages"}).Resource
 
-		sizes := make(map[string]banner_editor.BannerSize)
-		sizes["Laptop"] = banner_editor.BannerSize{Width: 960, Height: 500}
-		sizes["Mobile"] = banner_editor.BannerSize{Width: 320, Height: 150}
-
 		slideBanners.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
 			MediaLibrary: Admin.GetResource("MediaLibrary"),
-			BannerSizes:  sizes,
+			Platforms: []banner_editor.Platform{
+				{
+					Name:     "Laptop",
+					SafeArea: banner_editor.Size{Width: 960, Height: 500},
+				},
+				{
+					Name:     "Mobile",
+					SafeArea: banner_editor.Size{Width: 0, Height: 300}, // width: 0 = width: 100%
+				},
+			},
 		}})
 
 		// slideShowResource.AddProcessor(func(value interface{}, metaValues *resource.MetaValues, context *qor.Context) error {
