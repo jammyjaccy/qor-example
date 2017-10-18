@@ -252,6 +252,7 @@ func initWidgets() {
 			SlideImagesSorter sorting.SortableCollection
 		}
 		slideShowResource := Admin.NewResource(&slideShowArgument{})
+
 		slideBanners := slideShowResource.Meta(&admin.Meta{Name: "SlideImages"}).Resource
 
 		slideBanners.Meta(&admin.Meta{Name: "Value", Config: &banner_editor.BannerEditorConfig{
