@@ -47,6 +47,16 @@ func init() {
 	Admin.SetSiteName("Qor DEMO")
 	Admin.SetAuth(auth.AdminAuth{})
 
+	Admin.GetRouter().Use(&admin.Middleware{
+		Name: "switch_db",
+		Handler: func(context *admin.Context, middleware *admin.Middleware) {
+			if regexp.MustCompile("/admin/products").MatchString(context.Request.URL.Path) {
+				context.SetDB(db.DB2)
+			}
+			middleware.Next(context)
+		},
+	})
+
 	// Add Notification
 	Notification := notification.New(&notification.Config{})
 	Notification.RegisterChannel(database.New(&database.Config{DB: db.DB}))

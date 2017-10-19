@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	DB *gorm.DB
+	DB, DB2 *gorm.DB
 )
 
 func init() {
@@ -31,11 +31,16 @@ func init() {
 		DB = DB.Set("gorm:table_options", "CHARSET=utf8")
 	} else if config.Config.DB.Adapter == "postgres" {
 		DB, err = gorm.Open("postgres", fmt.Sprintf("postgres://%v:%v@%v/%v?sslmode=disable", dbConfig.User, dbConfig.Password, dbConfig.Host, dbConfig.Name))
+		DB2, err = gorm.Open("postgres", fmt.Sprintf("postgres://%v:%v@%v/%v?sslmode=disable", dbConfig.User, dbConfig.Password, dbConfig.Host, dbConfig.Name))
 	} else if config.Config.DB.Adapter == "sqlite" {
 		DB, err = gorm.Open("sqlite3", fmt.Sprintf("%v/%v", os.TempDir(), dbConfig.Name))
 	} else {
 		panic(errors.New("not supported database adapter"))
 	}
+
+	DB2.Callback().Query().After("gorm:query").Register("print_log", func(scope *gorm.Scope) {
+		fmt.Printf("%v data found from %v", scope.DB().RowsAffected, scope.TableName())
+	})
 
 	if err == nil {
 		if os.Getenv("DEBUG") != "" {
