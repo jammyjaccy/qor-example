@@ -19,6 +19,27 @@ import (
 
 var Widgets *widget.Widgets
 
+type Header struct {
+	Menus []Menu
+}
+
+type Menu struct {
+	Title    string
+	SubMenus []SubMenu
+}
+
+type SubMenu struct {
+	Title string
+
+	Items       []Item
+	ItemsSorter sorting.SortableCollection
+}
+
+type Item struct {
+	Title string
+	URL   string
+}
+
 type QorWidgetSetting struct {
 	widget.QorWidgetSetting
 	// publish2.Version
@@ -183,7 +204,9 @@ func initWidgets() {
 			},
 		})
 
+		banner_editor.RegisterExternalStylePath("https://fonts.googleapis.com/css?family=Lato|Playfair+Display|Raleway")
 		banner_editor.RegisterExternalStylePath("/dist/qor.css")
+		banner_editor.RegisterExternalStylePath("/dist/home_banner.css")
 
 		bannerEditorResource := Admin.NewResource(&bannerEditorArgument{})
 
@@ -346,10 +369,55 @@ func initWidgets() {
 			Sections []FooterSection
 		}
 
+		// For multiple level menu test
 		Widgets.RegisterWidget(&widget.Widget{
 			Name:        "Footer Links",
 			PreviewIcon: "/images/Widget-FooterLinks.png",
 			Setting:     Admin.NewResource(&FooterLinks{}),
+			Context: func(context *widget.Context, setting interface{}) *widget.Context {
+				context.Options["Setting"] = setting
+				return context
+			},
+		})
+
+		headerResource := Admin.NewResource(&Header{})
+		headerResource.EditAttrs(&admin.Section{
+			Rows: [][]string{{"Menus"}}},
+		)
+		headerMenuRes := headerResource.Meta(&admin.Meta{Name: "Menus"}).Resource
+		headerMenuRes.EditAttrs(&admin.Section{
+			Rows: [][]string{
+				{"Title", "URL"},
+				{"SubMenus"},
+			}},
+		)
+		headerMenuRes.NewAttrs(&admin.Section{
+			Rows: [][]string{
+				{"Title", "URL"},
+				{"SubMenus"},
+			}},
+		)
+		subMenuRes := headerMenuRes.Meta(&admin.Meta{Name: "SubMenus"}).Resource
+		subMenuRes.EditAttrs(&admin.Section{
+			Rows: [][]string{
+				{"Title", "URL"},
+				{"Items"},
+			}},
+		)
+		subMenuRes.NewAttrs(&admin.Section{
+			Rows: [][]string{
+				{"Title", "URL"},
+				{"Items"},
+			}},
+		)
+		itemRes := subMenuRes.Meta(&admin.Meta{Name: "Items"}).Resource
+		itemRes.EditAttrs(&admin.Section{Rows: [][]string{{"Title", "URL"}}})
+		itemRes.NewAttrs(&admin.Section{Rows: [][]string{{"Title", "URL"}}})
+
+		Widgets.RegisterWidget(&widget.Widget{
+			Name:        "Header",
+			PreviewIcon: "/images/Widget-FooterLinks.png",
+			Setting:     headerResource,
 			Context: func(context *widget.Context, setting interface{}) *widget.Context {
 				context.Options["Setting"] = setting
 				return context
